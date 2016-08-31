@@ -96,20 +96,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       haproxy.vm.provision "shell", inline: $hascript
   end
 
-#  config.vm.define "manager1" do |manager1|
-#      manager1.vm.hostname = "manager1"
-#      manager1.vm.network "private_network", ip: "172.20.20.10"
-#      manager1.vm.provision "shell", inline: $script
-#  end
-#  config.vm.define "worker1" do |worker1|
-#      worker1.vm.hostname = "worker1"
-#      worker1.vm.network "private_network", ip: "172.20.20.11"
-#      worker1.vm.provision "shell", inline: $script
-#  end
-#
-#  config.vm.define "worker2" do |worker2|
-#      worker2.vm.hostname = "worker2"
-#      worker2.vm.network "private_network", ip: "172.20.20.12"
-#      worker2.vm.provision "shell", inline: $script
-#  end
+  config.vm.define "manager1" do |manager1|
+      manager1.vm.hostname = "manager1"
+      manager1.vm.network "private_network", ip: "172.20.20.10"
+      manager1.vm.provision "shell", inline: $script
+  end
+  
+  config.vm.define "worker1" do |worker1|
+      worker1.vm.hostname = "worker1"
+      worker1.vm.network "private_network", ip: "172.20.20.11"
+      worker1.vm.provision "shell", inline: $script
+  end
+
+  config.vm.define "worker2" do |worker2|
+      worker2.vm.hostname = "worker2"
+      worker2.vm.network "private_network", ip: "172.20.20.12"
+      worker2.vm.provision "shell", inline: $script
+  end
 end
