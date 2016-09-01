@@ -27,22 +27,16 @@ sudo tee /docker-nginx/html/index.html <<-'EOF'
 <html>
 <body>
 
-<p>Click the button to display the hostname of the current URL.</p>
+<h2>Welcome to the docker swarm demo web page</h2>
 
-<button onclick="myFunction()">Try it</button>
 
-<p id="demo"></p>
+<p>The name of the host you are currently passed onto : SERVERNAME</p>
 
-<script>
-function myFunction() {
-    var x = location.hostname;
-    document.getElementById("demo").innerHTML= x;
-}
-</script>
 
 </body>
 </html>
 EOF
+sudo sed -i "s/SERVERNAME/$(hostname)/g" /docker-nginx/html/index.html
 sudo chmod -R 655 /docker-nginx
 SCRIPT
 
@@ -53,7 +47,7 @@ global
    log /dev/log local0
    log /dev/log local1 notice
    chroot /var/lib/haproxy
-   stats socket /run/haproxy/admin.sock mode 660 level admin
+   stats socket /var/run/haproxy/admin.sock mode 660 level admin
    stats timeout 30s
    user haproxy
    group haproxy
@@ -79,6 +73,7 @@ backend http_back
    server worker1 172.20.20.11:80 check
    server worker2 172.20.20.12:80 check
 EOF
+sudo mkdir -p /var/run/haproxy
 sudo systemctl start haproxy
 HASCRIPT
 
@@ -101,7 +96,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       manager1.vm.network "private_network", ip: "172.20.20.10"
       manager1.vm.provision "shell", inline: $script
   end
-  
+
   config.vm.define "worker1" do |worker1|
       worker1.vm.hostname = "worker1"
       worker1.vm.network "private_network", ip: "172.20.20.11"
